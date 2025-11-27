@@ -15,6 +15,20 @@
             --warning-color: #DAA520;
             --text-color: #5D4037;
             --background-color: #FAF0E6;
+            --header-height: 70px;
+        }
+        
+        /* Dark mode variables */
+        [data-theme="dark"] {
+            --primary-color: #a86c3e;
+            --secondary-color: #e07c3e;
+            --accent-color: #d8955f;
+            --light-color: #2d2d2d;
+            --dark-color: #e0e0e0;
+            --success-color: #34a853;
+            --warning-color: #f9ab00;
+            --text-color: #e0e0e0;
+            --background-color: #1e1e1e;
         }
         
         * {
@@ -25,10 +39,11 @@
         }
         
         body {
-            background: linear-gradient(135deg, #FAF0E6 0%, #F5F5DC 100%);
+            background: linear-gradient(135deg, var(--background-color) 0%, var(--light-color) 100%);
             color: var(--text-color);
             line-height: 1.6;
             min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
         }
         
         .container {
@@ -40,19 +55,25 @@
         header {
             background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 1rem 0;
+            padding: 0;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             border-bottom: 4px solid var(--accent-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: var(--header-height);
         }
         
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            height: 100%;
+            padding: 0 20px;
         }
         
         .logo {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             font-weight: bold;
             display: flex;
             align-items: center;
@@ -60,7 +81,7 @@
         }
         
         .logo-icon {
-            font-size: 2.5rem;
+            font-size: 2rem;
         }
         
         nav ul {
@@ -69,7 +90,7 @@
         }
         
         nav li {
-            margin-left: 20px;
+            margin-left: 15px;
         }
         
         nav a {
@@ -86,9 +107,71 @@
             transform: translateY(-2px);
         }
         
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
         .auth-buttons {
             display: flex;
             gap: 10px;
+        }
+        
+        .theme-toggle, .language-toggle {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        
+        .theme-toggle:hover, .language-toggle:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+        
+        .language-dropdown {
+            position: relative;
+        }
+        
+        .language-options {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 10px 0;
+            min-width: 150px;
+            display: none;
+            z-index: 1001;
+        }
+        
+        .language-dropdown:hover .language-options {
+            display: block;
+        }
+        
+        .language-options button {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.3s;
+            color: var(--text-color);
+        }
+        
+        .language-options button:hover {
+            background: rgba(0,0,0,0.05);
         }
         
         .btn {
@@ -132,12 +215,13 @@
         }
         
         .section {
-            background-color: white;
+            background-color: var(--light-color);
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             padding: 25px;
             margin-bottom: 25px;
             border: 1px solid rgba(139, 69, 19, 0.1);
+            transition: background-color 0.3s;
         }
         
         .section-title {
@@ -174,6 +258,7 @@
             font-size: 1rem;
             transition: all 0.3s;
             background-color: #f9f9f9;
+            color: var(--text-color);
         }
         
         input:focus, select:focus, textarea:focus {
@@ -487,15 +572,73 @@
             background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23d2691e' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
         }
         
+        /* Mobile menu styles */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .mobile-menu {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            width: 100%;
+            height: calc(100vh - var(--header-height));
+            background: var(--primary-color);
+            z-index: 999;
+            display: none;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .mobile-menu.active {
+            display: flex;
+        }
+        
+        .mobile-menu nav ul {
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .mobile-menu nav li {
+            margin: 0;
+        }
+        
+        .mobile-menu nav a {
+            display: block;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .mobile-controls {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
         @media (max-width: 768px) {
             .header-content {
-                flex-direction: column;
-                gap: 15px;
+                padding: 0 15px;
             }
             
-            nav ul {
-                flex-wrap: wrap;
-                justify-content: center;
+            .desktop-nav, .header-controls .auth-buttons, .header-controls .theme-toggle, .header-controls .language-toggle {
+                display: none;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .mobile-menu .auth-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
             }
             
             .form-row {
@@ -519,33 +662,78 @@
                 justify-content: center;
             }
         }
+        
+        @media (min-width: 769px) {
+            .mobile-menu {
+                display: none !important;
+            }
+        }
     </style>
 </head>
-<body class="maghreb-pattern">
+<body class="maghreb-pattern" data-theme="light">
     <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <span class="logo-icon">🌳</span>
-                    <span>Roots Maghreb</span>
-                </div>
-                <nav>
-                    <ul>
-                        <li><a href="#" data-tab="tree-view" class="active">Tree View</a></li>
-                        <li><a href="#" data-tab="table-view">Family Table</a></li>
-                        <li><a href="#" data-tab="saved-trees">Saved Trees</a></li>
-                    </ul>
-                </nav>
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">🌳</span>
+                <span data-translate="app-title">Roots Maghreb</span>
+            </div>
+            
+            <nav class="desktop-nav">
+                <ul>
+                    <li><a href="#" data-tab="tree-view" class="active" data-translate="nav-tree">Tree View</a></li>
+                    <li><a href="#" data-tab="table-view" data-translate="nav-table">Family Table</a></li>
+                    <li><a href="#" data-tab="saved-trees" data-translate="nav-saved">Saved Trees</a></li>
+                </ul>
+            </nav>
+            
+            <div class="header-controls">
                 <div class="auth-section">
                     <div id="auth-buttons" class="auth-buttons">
-                        <button id="login-btn" class="btn btn-secondary">Login</button>
-                        <button id="register-btn" class="btn btn-primary">Register</button>
+                        <button id="login-btn" class="btn btn-secondary" data-translate="btn-login">Login</button>
+                        <button id="register-btn" class="btn btn-primary" data-translate="btn-register">Register</button>
                     </div>
                     <div id="user-info" class="user-info hidden">
                         <div class="user-avatar" id="user-avatar">U</div>
                         <span id="username-display">User</span>
-                        <button id="logout-btn" class="btn btn-secondary">Logout</button>
+                        <button id="logout-btn" class="btn btn-secondary" data-translate="btn-logout">Logout</button>
                     </div>
+                </div>
+                
+                <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode">🌙</button>
+                
+                <div class="language-dropdown">
+                    <button class="language-toggle" title="Change language">🌐</button>
+                    <div class="language-options">
+                        <button data-lang="en" data-translate="lang-en">English</button>
+                        <button data-lang="ar" data-translate="lang-ar">العربية</button>
+                        <button data-lang="fr" data-translate="lang-fr">Français</button>
+                        <button data-lang="es" data-translate="lang-es">Español</button>
+                    </div>
+                </div>
+                
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle">☰</button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobile-menu">
+            <nav>
+                <ul>
+                    <li><a href="#" data-tab="tree-view" class="active" data-translate="nav-tree">Tree View</a></li>
+                    <li><a href="#" data-tab="table-view" data-translate="nav-table">Family Table</a></li>
+                    <li><a href="#" data-tab="saved-trees" data-translate="nav-saved">Saved Trees</a></li>
+                </ul>
+            </nav>
+            
+            <div class="mobile-controls">
+                <div id="mobile-auth-buttons" class="auth-buttons">
+                    <button id="mobile-login-btn" class="btn btn-secondary" data-translate="btn-login">Login</button>
+                    <button id="mobile-register-btn" class="btn btn-primary" data-translate="btn-register">Register</button>
+                </div>
+                <div id="mobile-user-info" class="user-info hidden">
+                    <div class="user-avatar" id="mobile-user-avatar">U</div>
+                    <span id="mobile-username-display">User</span>
+                    <button id="mobile-logout-btn" class="btn btn-secondary" data-translate="btn-logout">Logout</button>
                 </div>
             </div>
         </div>
@@ -554,23 +742,23 @@
     <div class="container">
         <!-- Welcome Section -->
         <div id="welcome-section" class="welcome-message">
-            <h2>Discover Your Maghreb Heritage</h2>
-            <p>Trace your family roots across generations with our beautiful genealogy tool. Create, visualize, and preserve your family history with Roots Maghreb.</p>
+            <h2 data-translate="welcome-title">Discover Your Maghreb Heritage</h2>
+            <p data-translate="welcome-text">Trace your family roots across generations with our beautiful genealogy tool. Create, visualize, and preserve your family history with Roots Maghreb.</p>
             <div class="feature-list">
                 <div class="feature">
                     <div class="feature-icon">🌳</div>
-                    <h3>Family Trees</h3>
-                    <p>Build beautiful family trees with multiple generations and connections</p>
+                    <h3 data-translate="feature1-title">Family Trees</h3>
+                    <p data-translate="feature1-text">Build beautiful family trees with multiple generations and connections</p>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">👥</div>
-                    <h3>Family Members</h3>
-                    <p>Add detailed information about each family member with photos and stories</p>
+                    <h3 data-translate="feature2-title">Family Members</h3>
+                    <p data-translate="feature2-text">Add detailed information about each family member with photos and stories</p>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">💾</div>
-                    <h3>Save & Export</h3>
-                    <p>Preserve your family history with secure storage and GEDCOM export</p>
+                    <h3 data-translate="feature3-title">Save & Export</h3>
+                    <p data-translate="feature3-text">Preserve your family history with secure storage and GEDCOM export</p>
                 </div>
             </div>
         </div>
@@ -579,20 +767,20 @@
         <div id="login-section" class="section hidden">
             <h2 class="section-title">
                 <span class="section-title-icon">🔐</span>
-                Login to Your Account
+                <span data-translate="login-title">Login to Your Account</span>
             </h2>
             <div id="login-alert" class="alert hidden"></div>
             <form id="login-form" class="login-form">
                 <div class="form-group">
-                    <label for="login-username">Username</label>
+                    <label for="login-username" data-translate="label-username">Username</label>
                     <input type="text" id="login-username" required>
                 </div>
                 <div class="form-group">
-                    <label for="login-password">Password</label>
+                    <label for="login-password" data-translate="label-password">Password</label>
                     <input type="password" id="login-password" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Login</button>
-                <button type="button" id="cancel-login" class="btn btn-secondary">Cancel</button>
+                <button type="submit" class="btn btn-primary" data-translate="btn-login">Login</button>
+                <button type="button" id="cancel-login" class="btn btn-secondary" data-translate="btn-cancel">Cancel</button>
             </form>
         </div>
 
@@ -600,28 +788,28 @@
         <div id="register-section" class="section hidden">
             <h2 class="section-title">
                 <span class="section-title-icon">📝</span>
-                Create New Account
+                <span data-translate="register-title">Create New Account</span>
             </h2>
             <div id="register-alert" class="alert hidden"></div>
             <form id="register-form" class="register-form">
                 <div class="form-group">
-                    <label for="register-username">Username</label>
+                    <label for="register-username" data-translate="label-username">Username</label>
                     <input type="text" id="register-username" required>
                 </div>
                 <div class="form-group">
-                    <label for="register-email">Email</label>
+                    <label for="register-email" data-translate="label-email">Email</label>
                     <input type="email" id="register-email" required>
                 </div>
                 <div class="form-group">
-                    <label for="register-password">Password</label>
+                    <label for="register-password" data-translate="label-password">Password</label>
                     <input type="password" id="register-password" required>
                 </div>
                 <div class="form-group">
-                    <label for="register-confirm-password">Confirm Password</label>
+                    <label for="register-confirm-password" data-translate="label-confirm-password">Confirm Password</label>
                     <input type="password" id="register-confirm-password" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Register</button>
-                <button type="button" id="cancel-register" class="btn btn-secondary">Cancel</button>
+                <button type="submit" class="btn btn-primary" data-translate="btn-register">Register</button>
+                <button type="button" id="cancel-register" class="btn btn-secondary" data-translate="btn-cancel">Cancel</button>
             </form>
         </div>
 
@@ -630,15 +818,15 @@
             <div class="tabs">
                 <div class="tab active" data-tab="tree-view">
                     <span>🌳</span>
-                    Tree View
+                    <span data-translate="nav-tree">Tree View</span>
                 </div>
                 <div class="tab" data-tab="table-view">
                     <span>📊</span>
-                    Family Table
+                    <span data-translate="nav-table">Family Table</span>
                 </div>
                 <div class="tab" data-tab="saved-trees">
                     <span>💾</span>
-                    Saved Trees
+                    <span data-translate="nav-saved">Saved Trees</span>
                 </div>
             </div>
 
@@ -647,18 +835,18 @@
                 <div class="section">
                     <h2 class="section-title">
                         <span class="section-title-icon">🌳</span>
-                        Family Tree
+                        <span data-translate="tree-title">Family Tree</span>
                     </h2>
                     <div class="form-group">
-                        <label for="tree-name">Tree Name</label>
+                        <label for="tree-name" data-translate="label-tree-name">Tree Name</label>
                         <input type="text" id="tree-name" placeholder="Enter a name for your family tree">
                     </div>
                     <div class="tree-controls">
-                        <button id="generate-tree-btn" class="btn btn-success">Generate Tree</button>
-                        <button id="save-tree-btn" class="btn btn-primary">Save Tree</button>
-                        <button id="export-gedcom-btn" class="btn btn-warning">Export to GEDCOM</button>
-                        <button id="load-tree-btn" class="btn btn-secondary">Load Tree</button>
-                        <button id="clear-tree-btn" class="btn btn-danger">Clear Tree</button>
+                        <button id="generate-tree-btn" class="btn btn-success" data-translate="btn-generate-tree">Generate Tree</button>
+                        <button id="save-tree-btn" class="btn btn-primary" data-translate="btn-save-tree">Save Tree</button>
+                        <button id="export-gedcom-btn" class="btn btn-warning" data-translate="btn-export-gedcom">Export to GEDCOM</button>
+                        <button id="load-tree-btn" class="btn btn-secondary" data-translate="btn-load-tree">Load Tree</button>
+                        <button id="clear-tree-btn" class="btn btn-danger" data-translate="btn-clear-tree">Clear Tree</button>
                     </div>
                     <div id="tree-alert" class="alert hidden"></div>
                 </div>
@@ -666,66 +854,66 @@
                 <div class="section">
                     <h2 class="section-title">
                         <span class="section-title-icon">👤</span>
-                        Add Family Member
+                        <span data-translate="add-person-title">Add Family Member</span>
                     </h2>
                     <form id="person-form">
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="person-name">Full Name</label>
+                                <label for="person-name" data-translate="label-fullname">Full Name</label>
                                 <input type="text" id="person-name" required>
                             </div>
                             <div class="form-group">
-                                <label for="person-gender">Gender</label>
+                                <label for="person-gender" data-translate="label-gender">Gender</label>
                                 <select id="person-gender" required>
-                                    <option value="">Select Gender</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                    <option value="unknown">Unknown</option>
+                                    <option value="" data-translate="select-gender">Select Gender</option>
+                                    <option value="male" data-translate="gender-male">Male</option>
+                                    <option value="female" data-translate="gender-female">Female</option>
+                                    <option value="unknown" data-translate="gender-unknown">Unknown</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="person-birth">Birth Date</label>
+                                <label for="person-birth" data-translate="label-birth-date">Birth Date</label>
                                 <input type="date" id="person-birth">
                             </div>
                             <div class="form-group">
-                                <label for="person-death">Death Date</label>
+                                <label for="person-death" data-translate="label-death-date">Death Date</label>
                                 <input type="date" id="person-death">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="person-notes">Notes</label>
+                            <label for="person-notes" data-translate="label-notes">Notes</label>
                             <textarea id="person-notes" rows="3"></textarea>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="person-father">Father</label>
+                                <label for="person-father" data-translate="label-father">Father</label>
                                 <select id="person-father">
-                                    <option value="">Select Father</option>
+                                    <option value="" data-translate="select-father">Select Father</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="person-mother">Mother</label>
+                                <label for="person-mother" data-translate="label-mother">Mother</label>
                                 <select id="person-mother">
-                                    <option value="">Select Mother</option>
+                                    <option value="" data-translate="select-mother">Select Mother</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="person-spouse">Spouse</label>
+                            <label for="person-spouse" data-translate="label-spouse">Spouse</label>
                                 <select id="person-spouse">
-                                <option value="">Select Spouse</option>
+                                <option value="" data-translate="select-spouse">Select Spouse</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary">Add Person</button>
+                        <button type="submit" class="btn btn-primary" data-translate="btn-add-person">Add Person</button>
                     </form>
                 </div>
 
                 <div class="section">
                     <h2 class="section-title">
                         <span class="section-title-icon">🌿</span>
-                        Family Tree Visualization
+                        <span data-translate="tree-visualization-title">Family Tree Visualization</span>
                     </h2>
                     <div class="tree-container" id="tree-visualization">
                         <!-- Tree will be rendered here -->
@@ -738,19 +926,19 @@
                 <div class="section">
                     <h2 class="section-title">
                         <span class="section-title-icon">📊</span>
-                        Family Members Table
+                        <span data-translate="table-title">Family Members Table</span>
                     </h2>
                     <table id="family-table">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Gender</th>
-                                <th>Birth Date</th>
-                                <th>Death Date</th>
-                                <th>Father</th>
-                                <th>Mother</th>
-                                <th>Spouse</th>
-                                <th>Actions</th>
+                                <th data-translate="table-name">Name</th>
+                                <th data-translate="table-gender">Gender</th>
+                                <th data-translate="table-birth">Birth Date</th>
+                                <th data-translate="table-death">Death Date</th>
+                                <th data-translate="table-father">Father</th>
+                                <th data-translate="table-mother">Mother</th>
+                                <th data-translate="table-spouse">Spouse</th>
+                                <th data-translate="table-actions">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="family-table-body">
@@ -765,7 +953,7 @@
                 <div class="section">
                     <h2 class="section-title">
                         <span class="section-title-icon">💾</span>
-                        Your Saved Family Trees
+                        <span data-translate="saved-trees-title">Your Saved Family Trees</span>
                     </h2>
                     <div class="tree-list" id="saved-trees-list">
                         <!-- Saved trees will be listed here -->
@@ -776,12 +964,338 @@
     </div>
 
     <script>
+        // Translation dictionary
+        const translations = {
+            en: {
+                // App
+                "app-title": "Roots Maghreb",
+                
+                // Navigation
+                "nav-tree": "Tree View",
+                "nav-table": "Family Table",
+                "nav-saved": "Saved Trees",
+                
+                // Buttons
+                "btn-login": "Login",
+                "btn-register": "Register",
+                "btn-logout": "Logout",
+                "btn-cancel": "Cancel",
+                "btn-generate-tree": "Generate Tree",
+                "btn-save-tree": "Save Tree",
+                "btn-export-gedcom": "Export to GEDCOM",
+                "btn-load-tree": "Load Tree",
+                "btn-clear-tree": "Clear Tree",
+                "btn-add-person": "Add Person",
+                
+                // Welcome section
+                "welcome-title": "Discover Your Maghreb Heritage",
+                "welcome-text": "Trace your family roots across generations with our beautiful genealogy tool. Create, visualize, and preserve your family history with Roots Maghreb.",
+                "feature1-title": "Family Trees",
+                "feature1-text": "Build beautiful family trees with multiple generations and connections",
+                "feature2-title": "Family Members",
+                "feature2-text": "Add detailed information about each family member with photos and stories",
+                "feature3-title": "Save & Export",
+                "feature3-text": "Preserve your family history with secure storage and GEDCOM export",
+                
+                // Forms
+                "login-title": "Login to Your Account",
+                "register-title": "Create New Account",
+                "label-username": "Username",
+                "label-password": "Password",
+                "label-email": "Email",
+                "label-confirm-password": "Confirm Password",
+                "label-tree-name": "Tree Name",
+                "label-fullname": "Full Name",
+                "label-gender": "Gender",
+                "label-birth-date": "Birth Date",
+                "label-death-date": "Death Date",
+                "label-notes": "Notes",
+                "label-father": "Father",
+                "label-mother": "Mother",
+                "label-spouse": "Spouse",
+                
+                // Select options
+                "select-gender": "Select Gender",
+                "gender-male": "Male",
+                "gender-female": "Female",
+                "gender-unknown": "Unknown",
+                "select-father": "Select Father",
+                "select-mother": "Select Mother",
+                "select-spouse": "Select Spouse",
+                
+                // Sections
+                "tree-title": "Family Tree",
+                "add-person-title": "Add Family Member",
+                "tree-visualization-title": "Family Tree Visualization",
+                "table-title": "Family Members Table",
+                "saved-trees-title": "Your Saved Family Trees",
+                
+                // Table headers
+                "table-name": "Name",
+                "table-gender": "Gender",
+                "table-birth": "Birth Date",
+                "table-death": "Death Date",
+                "table-father": "Father",
+                "table-mother": "Mother",
+                "table-spouse": "Spouse",
+                "table-actions": "Actions",
+                
+                // Language options
+                "lang-en": "English",
+                "lang-ar": "العربية",
+                "lang-fr": "Français",
+                "lang-es": "Español"
+            },
+            ar: {
+                // App
+                "app-title": "جذور المغرب",
+                
+                // Navigation
+                "nav-tree": "عرض الشجرة",
+                "nav-table": "جدول العائلة",
+                "nav-saved": "الأشجار المحفوظة",
+                
+                // Buttons
+                "btn-login": "تسجيل الدخول",
+                "btn-register": "إنشاء حساب",
+                "btn-logout": "تسجيل الخروج",
+                "btn-cancel": "إلغاء",
+                "btn-generate-tree": "إنشاء الشجرة",
+                "btn-save-tree": "حفظ الشجرة",
+                "btn-export-gedcom": "تصدير إلى GEDCOM",
+                "btn-load-tree": "تحميل الشجرة",
+                "btn-clear-tree": "مسح الشجرة",
+                "btn-add-person": "إضافة شخص",
+                
+                // Welcome section
+                "welcome-title": "اكتشف تراث المغرب",
+                "welcome-text": "تتبع جذور عائلتك عبر الأجيال باستخدام أداة الأنساب الجميلة الخاصة بنا. أنشئ وتصور واحفظ تاريخ عائلتك مع جذور المغرب.",
+                "feature1-title": "أشجار العائلة",
+                "feature1-text": "قم ببناء أشجار عائلة جميلة بطبقات متعددة وروابط",
+                "feature2-title": "أفراد العائلة",
+                "feature2-text": "أضف معلومات مفصلة عن كل فرد من أفراد العائلة مع الصور والقصص",
+                "feature3-title": "حفظ وتصدير",
+                "feature3-text": "احفظ تاريخ عائلتك مع التخزين الآمن وتصدير GEDCOM",
+                
+                // Forms
+                "login-title": "تسجيل الدخول إلى حسابك",
+                "register-title": "إنشاء حساب جديد",
+                "label-username": "اسم المستخدم",
+                "label-password": "كلمة المرور",
+                "label-email": "البريد الإلكتروني",
+                "label-confirm-password": "تأكيد كلمة المرور",
+                "label-tree-name": "اسم الشجرة",
+                "label-fullname": "الاسم الكامل",
+                "label-gender": "الجنس",
+                "label-birth-date": "تاريخ الميلاد",
+                "label-death-date": "تاريخ الوفاة",
+                "label-notes": "ملاحظات",
+                "label-father": "الأب",
+                "label-mother": "الأم",
+                "label-spouse": "الزوج/الزوجة",
+                
+                // Select options
+                "select-gender": "اختر الجنس",
+                "gender-male": "ذكر",
+                "gender-female": "أنثى",
+                "gender-unknown": "غير معروف",
+                "select-father": "اختر الأب",
+                "select-mother": "اختر الأم",
+                "select-spouse": "اختر الزوج/الزوجة",
+                
+                // Sections
+                "tree-title": "شجرة العائلة",
+                "add-person-title": "إضافة فرد للعائلة",
+                "tree-visualization-title": "تصور شجرة العائلة",
+                "table-title": "جدول أفراد العائلة",
+                "saved-trees-title": "أشجار العائلة المحفوظة",
+                
+                // Table headers
+                "table-name": "الاسم",
+                "table-gender": "الجنس",
+                "table-birth": "تاريخ الميلاد",
+                "table-death": "تاريخ الوفاة",
+                "table-father": "الأب",
+                "table-mother": "الأم",
+                "table-spouse": "الزوج/الزوجة",
+                "table-actions": "الإجراءات",
+                
+                // Language options
+                "lang-en": "English",
+                "lang-ar": "العربية",
+                "lang-fr": "Français",
+                "lang-es": "Español"
+            },
+            fr: {
+                // App
+                "app-title": "Racines Maghreb",
+                
+                // Navigation
+                "nav-tree": "Vue Arbre",
+                "nav-table": "Tableau Familial",
+                "nav-saved": "Arbres Sauvegardés",
+                
+                // Buttons
+                "btn-login": "Connexion",
+                "btn-register": "S'inscrire",
+                "btn-logout": "Déconnexion",
+                "btn-cancel": "Annuler",
+                "btn-generate-tree": "Générer l'Arbre",
+                "btn-save-tree": "Sauvegarder l'Arbre",
+                "btn-export-gedcom": "Exporter en GEDCOM",
+                "btn-load-tree": "Charger l'Arbre",
+                "btn-clear-tree": "Effacer l'Arbre",
+                "btn-add-person": "Ajouter une Personne",
+                
+                // Welcome section
+                "welcome-title": "Découvrez Votre Héritage Maghrébin",
+                "welcome-text": "Retracez vos racines familiales à travers les générations avec notre bel outil de généalogie. Créez, visualisez et préservez l'histoire de votre famille avec Racines Maghreb.",
+                "feature1-title": "Arbres Généalogiques",
+                "feature1-text": "Construisez de beaux arbres généalogiques avec plusieurs générations et connexions",
+                "feature2-title": "Membres de la Famille",
+                "feature2-text": "Ajoutez des informations détaillées sur chaque membre de la famille avec des photos et des histoires",
+                "feature3-title": "Sauvegarde et Export",
+                "feature3-text": "Préservez l'histoire de votre famille avec un stockage sécurisé et l'export GEDCOM",
+                
+                // Forms
+                "login-title": "Connectez-vous à Votre Compte",
+                "register-title": "Créer un Nouveau Compte",
+                "label-username": "Nom d'utilisateur",
+                "label-password": "Mot de passe",
+                "label-email": "Email",
+                "label-confirm-password": "Confirmer le Mot de Passe",
+                "label-tree-name": "Nom de l'Arbre",
+                "label-fullname": "Nom Complet",
+                "label-gender": "Genre",
+                "label-birth-date": "Date de Naissance",
+                "label-death-date": "Date de Décès",
+                "label-notes": "Notes",
+                "label-father": "Père",
+                "label-mother": "Mère",
+                "label-spouse": "Conjoint",
+                
+                // Select options
+                "select-gender": "Sélectionnez le Genre",
+                "gender-male": "Homme",
+                "gender-female": "Femme",
+                "gender-unknown": "Inconnu",
+                "select-father": "Sélectionnez le Père",
+                "select-mother": "Sélectionnez la Mère",
+                "select-spouse": "Sélectionnez le Conjoint",
+                
+                // Sections
+                "tree-title": "Arbre Généalogique",
+                "add-person-title": "Ajouter un Membre de la Famille",
+                "tree-visualization-title": "Visualisation de l'Arbre Généalogique",
+                "table-title": "Tableau des Membres de la Famille",
+                "saved-trees-title": "Vos Arbres Généalogiques Sauvegardés",
+                
+                // Table headers
+                "table-name": "Nom",
+                "table-gender": "Genre",
+                "table-birth": "Date de Naissance",
+                "table-death": "Date de Décès",
+                "table-father": "Père",
+                "table-mother": "Mère",
+                "table-spouse": "Conjoint",
+                "table-actions": "Actions",
+                
+                // Language options
+                "lang-en": "English",
+                "lang-ar": "العربية",
+                "lang-fr": "Français",
+                "lang-es": "Español"
+            },
+            es: {
+                // App
+                "app-title": "Raíces Magreb",
+                
+                // Navigation
+                "nav-tree": "Vista de Árbol",
+                "nav-table": "Tabla Familiar",
+                "nav-saved": "Árboles Guardados",
+                
+                // Buttons
+                "btn-login": "Iniciar Sesión",
+                "btn-register": "Registrarse",
+                "btn-logout": "Cerrar Sesión",
+                "btn-cancel": "Cancelar",
+                "btn-generate-tree": "Generar Árbol",
+                "btn-save-tree": "Guardar Árbol",
+                "btn-export-gedcom": "Exportar a GEDCOM",
+                "btn-load-tree": "Cargar Árbol",
+                "btn-clear-tree": "Limpiar Árbol",
+                "btn-add-person": "Añadir Persona",
+                
+                // Welcome section
+                "welcome-title": "Descubre Tu Herencia Magrebí",
+                "welcome-text": "Rastrea las raíces de tu familia a través de generaciones con nuestra hermosa herramienta de genealogía. Crea, visualiza y preserva la historia de tu familia con Raíces Magreb.",
+                "feature1-title": "Árboles Familiares",
+                "feature1-text": "Construye hermosos árboles genealógicos con múltiples generaciones y conexiones",
+                "feature2-title": "Miembros de la Familia",
+                "feature2-text": "Añade información detallada sobre cada miembro de la familia con fotos e historias",
+                "feature3-title": "Guardar y Exportar",
+                "feature3-text": "Preserva la historia de tu familia con almacenamiento seguro y exportación GEDCOM",
+                
+                // Forms
+                "login-title": "Iniciar Sesión en Tu Cuenta",
+                "register-title": "Crear Nueva Cuenta",
+                "label-username": "Nombre de Usuario",
+                "label-password": "Contraseña",
+                "label-email": "Correo Electrónico",
+                "label-confirm-password": "Confirmar Contraseña",
+                "label-tree-name": "Nombre del Árbol",
+                "label-fullname": "Nombre Completo",
+                "label-gender": "Género",
+                "label-birth-date": "Fecha de Nacimiento",
+                "label-death-date": "Fecha de Fallecimiento",
+                "label-notes": "Notas",
+                "label-father": "Padre",
+                "label-mother": "Madre",
+                "label-spouse": "Cónyuge",
+                
+                // Select options
+                "select-gender": "Seleccionar Género",
+                "gender-male": "Masculino",
+                "gender-female": "Femenino",
+                "gender-unknown": "Desconocido",
+                "select-father": "Seleccionar Padre",
+                "select-mother": "Seleccionar Madre",
+                "select-spouse": "Seleccionar Cónyuge",
+                
+                // Sections
+                "tree-title": "Árbol Genealógico",
+                "add-person-title": "Añadir Miembro de la Familia",
+                "tree-visualization-title": "Visualización del Árbol Genealógico",
+                "table-title": "Tabla de Miembros de la Familia",
+                "saved-trees-title": "Tus Árboles Genealógicos Guardados",
+                
+                // Table headers
+                "table-name": "Nombre",
+                "table-gender": "Género",
+                "table-birth": "Fecha de Nacimiento",
+                "table-death": "Fecha de Fallecimiento",
+                "table-father": "Padre",
+                "table-mother": "Madre",
+                "table-spouse": "Cónyuge",
+                "table-actions": "Acciones",
+                
+                // Language options
+                "lang-en": "English",
+                "lang-ar": "العربية",
+                "lang-fr": "Français",
+                "lang-es": "Español"
+            }
+        };
+
         // Application state
         const state = {
             currentUser: null,
             familyTree: [],
             savedTrees: [],
-            currentTreeId: null
+            currentTreeId: null,
+            currentLanguage: 'en',
+            currentTheme: 'light'
         };
 
         // DOM Elements
@@ -794,6 +1308,19 @@
             loginBtn: document.getElementById('login-btn'),
             registerBtn: document.getElementById('register-btn'),
             logoutBtn: document.getElementById('logout-btn'),
+            
+            // Mobile auth elements
+            mobileAuthButtons: document.getElementById('mobile-auth-buttons'),
+            mobileUserInfo: document.getElementById('mobile-user-info'),
+            mobileUserAvatar: document.getElementById('mobile-user-avatar'),
+            mobileUsernameDisplay: document.getElementById('mobile-username-display'),
+            mobileLoginBtn: document.getElementById('mobile-login-btn'),
+            mobileRegisterBtn: document.getElementById('mobile-register-btn'),
+            mobileLogoutBtn: document.getElementById('mobile-logout-btn'),
+            
+            // Mobile menu
+            mobileMenuToggle: document.getElementById('mobile-menu-toggle'),
+            mobileMenu: document.getElementById('mobile-menu'),
             
             // Forms
             loginSection: document.getElementById('login-section'),
@@ -830,7 +1357,11 @@
             // Alerts
             loginAlert: document.getElementById('login-alert'),
             registerAlert: document.getElementById('register-alert'),
-            treeAlert: document.getElementById('tree-alert')
+            treeAlert: document.getElementById('tree-alert'),
+            
+            // Theme and language
+            themeToggle: document.getElementById('theme-toggle'),
+            languageButtons: document.querySelectorAll('.language-options button')
         };
 
         // Initialize the application
@@ -839,7 +1370,6 @@
             const savedUser = localStorage.getItem('currentUser');
             if (savedUser) {
                 state.currentUser = JSON.parse(savedUser);
-                updateUI();
             }
             
             // Load saved trees from localStorage
@@ -848,11 +1378,31 @@
                 state.savedTrees = JSON.parse(savedTrees);
             }
             
+            // Load language preference
+            const savedLanguage = localStorage.getItem('language');
+            if (savedLanguage) {
+                state.currentLanguage = savedLanguage;
+            }
+            
+            // Load theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                state.currentTheme = savedTheme;
+                document.body.setAttribute('data-theme', state.currentTheme);
+                updateThemeToggle();
+            }
+            
             // Set up event listeners
             setupEventListeners();
             
             // Initialize dropdowns
             updatePersonDropdowns();
+            
+            // Update UI based on initial state
+            updateUI();
+            
+            // Apply initial translations
+            applyTranslations(state.currentLanguage);
         }
 
         // Set up event listeners
@@ -863,6 +1413,14 @@
             elements.logoutBtn.addEventListener('click', logout);
             elements.cancelLogin.addEventListener('click', hideAuthForms);
             elements.cancelRegister.addEventListener('click', hideAuthForms);
+            
+            // Mobile auth buttons
+            elements.mobileLoginBtn.addEventListener('click', showLoginForm);
+            elements.mobileRegisterBtn.addEventListener('click', showRegisterForm);
+            elements.mobileLogoutBtn.addEventListener('click', logout);
+            
+            // Mobile menu
+            elements.mobileMenuToggle.addEventListener('click', toggleMobileMenu);
             
             // Auth forms
             elements.loginForm.addEventListener('submit', handleLogin);
@@ -880,6 +1438,12 @@
             elements.exportGedcomBtn.addEventListener('click', exportToGedcom);
             elements.loadTreeBtn.addEventListener('click', showLoadTreeModal);
             elements.clearTreeBtn.addEventListener('click', clearTree);
+            
+            // Theme and language
+            elements.themeToggle.addEventListener('click', toggleTheme);
+            elements.languageButtons.forEach(button => {
+                button.addEventListener('click', () => changeLanguage(button.dataset.lang));
+            });
         }
 
         // Update UI based on authentication state
@@ -887,17 +1451,23 @@
             if (state.currentUser) {
                 elements.authButtons.classList.add('hidden');
                 elements.userInfo.classList.remove('hidden');
+                elements.mobileAuthButtons.classList.add('hidden');
+                elements.mobileUserInfo.classList.remove('hidden');
                 elements.mainContent.classList.remove('hidden');
                 elements.welcomeSection.classList.add('hidden');
                 
                 elements.usernameDisplay.textContent = state.currentUser.username;
                 elements.userAvatar.textContent = state.currentUser.username.charAt(0).toUpperCase();
+                elements.mobileUsernameDisplay.textContent = state.currentUser.username;
+                elements.mobileUserAvatar.textContent = state.currentUser.username.charAt(0).toUpperCase();
                 
                 // Load user's trees
                 loadUserTrees();
             } else {
                 elements.authButtons.classList.remove('hidden');
                 elements.userInfo.classList.add('hidden');
+                elements.mobileAuthButtons.classList.remove('hidden');
+                elements.mobileUserInfo.classList.add('hidden');
                 elements.mainContent.classList.add('hidden');
                 elements.welcomeSection.classList.remove('hidden');
                 hideAuthForms();
@@ -908,23 +1478,77 @@
             renderTree();
         }
 
+        // Theme functions
+        function toggleTheme() {
+            state.currentTheme = state.currentTheme === 'light' ? 'dark' : 'light';
+            document.body.setAttribute('data-theme', state.currentTheme);
+            localStorage.setItem('theme', state.currentTheme);
+            updateThemeToggle();
+        }
+
+        function updateThemeToggle() {
+            elements.themeToggle.textContent = state.currentTheme === 'light' ? '🌙' : '☀️';
+        }
+
+        // Language functions
+        function changeLanguage(lang) {
+            state.currentLanguage = lang;
+            localStorage.setItem('language', lang);
+            applyTranslations(lang);
+        }
+
+        function applyTranslations(lang) {
+            const elementsToTranslate = document.querySelectorAll('[data-translate]');
+            
+            elementsToTranslate.forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[lang] && translations[lang][key]) {
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.placeholder = translations[lang][key];
+                    } else {
+                        element.textContent = translations[lang][key];
+                    }
+                }
+            });
+            
+            // Update RTL for Arabic
+            if (lang === 'ar') {
+                document.body.style.direction = 'rtl';
+                document.querySelector('.container').style.textAlign = 'right';
+            } else {
+                document.body.style.direction = 'ltr';
+                document.querySelector('.container').style.textAlign = 'left';
+            }
+        }
+
+        // Mobile menu functions
+        function toggleMobileMenu() {
+            elements.mobileMenu.classList.toggle('active');
+        }
+
         // Auth functions
         function showLoginForm() {
             elements.loginSection.classList.remove('hidden');
             elements.registerSection.classList.add('hidden');
             hideAlerts();
+            closeMobileMenu();
         }
 
         function showRegisterForm() {
             elements.registerSection.classList.remove('hidden');
             elements.loginSection.classList.add('hidden');
             hideAlerts();
+            closeMobileMenu();
         }
 
         function hideAuthForms() {
             elements.loginSection.classList.add('hidden');
             elements.registerSection.classList.add('hidden');
             hideAlerts();
+        }
+
+        function closeMobileMenu() {
+            elements.mobileMenu.classList.remove('active');
         }
 
         function handleLogin(e) {
@@ -997,6 +1621,7 @@
             localStorage.removeItem('currentUser');
             updateUI();
             showAlert(elements.treeAlert, 'You have been logged out', 'success');
+            closeMobileMenu();
         }
 
         // Tab switching
@@ -1018,6 +1643,8 @@
                     content.classList.remove('active');
                 }
             });
+            
+            closeMobileMenu();
         }
 
         // Family tree functions
