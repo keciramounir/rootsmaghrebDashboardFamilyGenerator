@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roots Maghreb - Genealogy Tree Generator</title>
+    <style>
+        :root {
+            --primary-color: #8B4513;
+            --secondary-color: #D2691E;
+            --accent-color: #CD853F;
+            --light-color: #F5F5DC;
+            --dark-color: #654321;
+            --success-color: #228B22;
+            --warning-color: #DAA520;
+            --text-color: #5D4037;
+            --background-color: #FAF0E6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #FAF0E6 0%, #F5F5DC 100%);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-bottom: 4px solid var(--accent-color);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 2.2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav li {
+            margin-left: 20px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        nav a:hover, nav a.active {
+            background-color: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, var(--secondary-color), var(--accent-color));
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+        
+        .btn-success {
+            background: linear-gradient(to right, var(--success-color), #32CD32);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(to right, #DC143C, #FF4500);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(to right, var(--warning-color), #FFD700);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+        
+        .section {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(139, 69, 19, 0.1);
+        }
+        
+        .section-title {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-color);
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title-icon {
+            font-size: 1.8rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background-color: #f9f9f9;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(210, 105, 30, 0.2);
+            background-color: white;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .tree-container {
+            width: 100%;
+            overflow: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%);
+            min-height: 500px;
+            position: relative;
+        }
+        
+        .tree-node {
+            display: inline-block;
+            padding: 15px 20px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 10px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            position: relative;
+            transition: all 0.3s;
+            min-width: 150px;
+        }
+        
+        .tree-node:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .tree-node.male {
+            border-left: 5px solid var(--secondary-color);
+            background: linear-gradient(to right, white, #FFF8DC);
+        }
+        
+        .tree-node.female {
+            border-left: 5px solid #CD5C5C;
+            background: linear-gradient(to right, white, #FFE4E1);
+        }
+        
+        .tree-node.unknown {
+            border-left: 5px solid #95a5a6;
+        }
+        
+        .tree-connector {
+            position: absolute;
+            background-color: var(--accent-color);
+        }
+        
+        .tree-connector.horizontal {
+            height: 2px;
+        }
+        
+        .tree-connector.vertical {
+            width: 2px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid var(--light-color);
+            margin-bottom: 25px;
+            background: white;
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .tab:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .tab.active {
+            border-bottom: 3px solid var(--secondary-color);
+            color: var(--secondary-color);
+            background-color: #f9f9f9;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .tree-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .tree-card {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tree-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+        }
+        
+        .tree-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        
+        .tree-card h3 {
+            margin-bottom: 10px;
+            color: var(--primary-color);
+            font-size: 1.3rem;
+        }
+        
+        .tree-card p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .tree-card-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 5px solid;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border-left-color: var(--success-color);
+        }
+        
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left-color: #DC143C;
+        }
+        
+        .login-form, .register-form {
+            max-width: 450px;
+            margin: 0 auto;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(to right, var(--secondary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+        
+        .welcome-message {
+            text-align: center;
+            padding: 50px 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, white 0%, #f9f9f9 100%);
+            border: 1px solid rgba(139, 69, 19, 0.1);
+        }
+        
+        .welcome-message h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+        }
+        
+        .welcome-message p {
+            color: var(--text-color);
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        .feature-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .feature {
+            flex: 1;
+            min-width: 220px;
+            text-align: center;
+            padding: 30px 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            border: 1px solid rgba(139, 69, 19, 0.1);
+        }
+        
+        .feature:hover {
+            transform: translateY(-8px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+        }
+        
+        .feature h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .feature p {
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .tree-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .maghreb-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23d2691e' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .tree-controls {
+                flex-direction: column;
+            }
+            
+            .feature-list {
+                flex-direction: column;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body class="maghreb-pattern">
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🌳</span>
+                    <span>Roots Maghreb</span>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#" data-tab="tree-view" class="active">Tree View</a></li>
+                        <li><a href="#" data-tab="table-view">Family Table</a></li>
+                        <li><a href="#" data-tab="saved-trees">Saved Trees</a></li>
+                    </ul>
+                </nav>
+                <div class="auth-section">
+                    <div id="auth-buttons" class="auth-buttons">
+                        <button id="login-btn" class="btn btn-secondary">Login</button>
+                        <button id="register-btn" class="btn btn-primary">Register</button>
+                    </div>
+                    <div id="user-info" class="user-info hidden">
+                        <div class="user-avatar" id="user-avatar">U</div>
+                        <span id="username-display">User</span>
+                        <button id="logout-btn" class="btn btn-secondary">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Welcome Section -->
+        <div id="welcome-section" class="welcome-message">
+            <h2>Discover Your Maghreb Heritage</h2>
+            <p>Trace your family roots across generations with our beautiful genealogy tool. Create, visualize, and preserve your family history with Roots Maghreb.</p>
+            <div class="feature-list">
+                <div class="feature">
+                    <div class="feature-icon">🌳</div>
+                    <h3>Family Trees</h3>
+                    <p>Build beautiful family trees with multiple generations and connections</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">👥</div>
+                    <h3>Family Members</h3>
+                    <p>Add detailed information about each family member with photos and stories</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💾</div>
+                    <h3>Save & Export</h3>
+                    <p>Preserve your family history with secure storage and GEDCOM export</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Form -->
+        <div id="login-section" class="section hidden">
+            <h2 class="section-title">
+                <span class="section-title-icon">🔐</span>
+                Login to Your Account
+            </h2>
+            <div id="login-alert" class="alert hidden"></div>
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <button type="button" id="cancel-login" class="btn btn-secondary">Cancel</button>
+            </form>
+        </div>
+
+        <!-- Register Form -->
+        <div id="register-section" class="section hidden">
+            <h2 class="section-title">
+                <span class="section-title-icon">📝</span>
+                Create New Account
+            </h2>
+            <div id="register-alert" class="alert hidden"></div>
+            <form id="register-form" class="register-form">
+                <div class="form-group">
+                    <label for="register-username">Username</label>
+                    <input type="text" id="register-username" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm-password">Confirm Password</label>
+                    <input type="password" id="register-confirm-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="button" id="cancel-register" class="btn btn-secondary">Cancel</button>
+            </form>
+        </div>
+
+        <!-- Main Content -->
+        <div id="main-content" class="hidden">
+            <div class="tabs">
+                <div class="tab active" data-tab="tree-view">
+                    <span>🌳</span>
+                    Tree View
+                </div>
+                <div class="tab" data-tab="table-view">
+                    <span>📊</span>
+                    Family Table
+                </div>
+                <div class="tab" data-tab="saved-trees">
+                    <span>💾</span>
+                    Saved Trees
+                </div>
+            </div>
+
+            <!-- Tree View Tab -->
+            <div id="tree-view" class="tab-content active">
+                <div class="section">
+                    <h2 class="section-title">
+                        <span class="section-title-icon">🌳</span>
+                        Family Tree
+                    </h2>
+                    <div class="form-group">
+                        <label for="tree-name">Tree Name</label>
+                        <input type="text" id="tree-name" placeholder="Enter a name for your family tree">
+                    </div>
+                    <div class="tree-controls">
+                        <button id="generate-tree-btn" class="btn btn-success">Generate Tree</button>
+                        <button id="save-tree-btn" class="btn btn-primary">Save Tree</button>
+                        <button id="export-gedcom-btn" class="btn btn-warning">Export to GEDCOM</button>
+                        <button id="load-tree-btn" class="btn btn-secondary">Load Tree</button>
+                        <button id="clear-tree-btn" class="btn btn-danger">Clear Tree</button>
+                    </div>
+                    <div id="tree-alert" class="alert hidden"></div>
+                </div>
+
+                <div class="section">
+                    <h2 class="section-title">
+                        <span class="section-title-icon">👤</span>
+                        Add Family Member
+                    </h2>
+                    <form id="person-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="person-name">Full Name</label>
+                                <input type="text" id="person-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="person-gender">Gender</label>
+                                <select id="person-gender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="unknown">Unknown</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="person-birth">Birth Date</label>
+                                <input type="date" id="person-birth">
+                            </div>
+                            <div class="form-group">
+                                <label for="person-death">Death Date</label>
+                                <input type="date" id="person-death">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="person-notes">Notes</label>
+                            <textarea id="person-notes" rows="3"></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="person-father">Father</label>
+                                <select id="person-father">
+                                    <option value="">Select Father</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="person-mother">Mother</label>
+                                <select id="person-mother">
+                                    <option value="">Select Mother</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="person-spouse">Spouse</label>
+                                <select id="person-spouse">
+                                <option value="">Select Spouse</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Person</button>
+                    </form>
+                </div>
+
+                <div class="section">
+                    <h2 class="section-title">
+                        <span class="section-title-icon">🌿</span>
+                        Family Tree Visualization
+                    </h2>
+                    <div class="tree-container" id="tree-visualization">
+                        <!-- Tree will be rendered here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table View Tab -->
+            <div id="table-view" class="tab-content">
+                <div class="section">
+                    <h2 class="section-title">
+                        <span class="section-title-icon">📊</span>
+                        Family Members Table
+                    </h2>
+                    <table id="family-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Gender</th>
+                                <th>Birth Date</th>
+                                <th>Death Date</th>
+                                <th>Father</th>
+                                <th>Mother</th>
+                                <th>Spouse</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="family-table-body">
+                            <!-- Table rows will be added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Saved Trees Tab -->
+            <div id="saved-trees" class="tab-content">
+                <div class="section">
+                    <h2 class="section-title">
+                        <span class="section-title-icon">💾</span>
+                        Your Saved Family Trees
+                    </h2>
+                    <div class="tree-list" id="saved-trees-list">
+                        <!-- Saved trees will be listed here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Application state
+        const state = {
+            currentUser: null,
+            familyTree: [],
+            savedTrees: [],
+            currentTreeId: null
+        };
+
+        // DOM Elements
+        const elements = {
+            // Auth elements
+            authButtons: document.getElementById('auth-buttons'),
+            userInfo: document.getElementById('user-info'),
+            userAvatar: document.getElementById('user-avatar'),
+            usernameDisplay: document.getElementById('username-display'),
+            loginBtn: document.getElementById('login-btn'),
+            registerBtn: document.getElementById('register-btn'),
+            logoutBtn: document.getElementById('logout-btn'),
+            
+            // Forms
+            loginSection: document.getElementById('login-section'),
+            registerSection: document.getElementById('register-section'),
+            loginForm: document.getElementById('login-form'),
+            registerForm: document.getElementById('register-form'),
+            cancelLogin: document.getElementById('cancel-login'),
+            cancelRegister: document.getElementById('cancel-register'),
+            
+            // Main content
+            mainContent: document.getElementById('main-content'),
+            welcomeSection: document.getElementById('welcome-section'),
+            
+            // Tabs
+            tabs: document.querySelectorAll('.tab'),
+            tabContents: document.querySelectorAll('.tab-content'),
+            
+            // Tree elements
+            treeVisualization: document.getElementById('tree-visualization'),
+            personForm: document.getElementById('person-form'),
+            treeName: document.getElementById('tree-name'),
+            generateTreeBtn: document.getElementById('generate-tree-btn'),
+            saveTreeBtn: document.getElementById('save-tree-btn'),
+            exportGedcomBtn: document.getElementById('export-gedcom-btn'),
+            loadTreeBtn: document.getElementById('load-tree-btn'),
+            clearTreeBtn: document.getElementById('clear-tree-btn'),
+            
+            // Table elements
+            familyTableBody: document.getElementById('family-table-body'),
+            
+            // Saved trees
+            savedTreesList: document.getElementById('saved-trees-list'),
+            
+            // Alerts
+            loginAlert: document.getElementById('login-alert'),
+            registerAlert: document.getElementById('register-alert'),
+            treeAlert: document.getElementById('tree-alert')
+        };
+
+        // Initialize the application
+        function init() {
+            // Check if user is logged in from localStorage
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                state.currentUser = JSON.parse(savedUser);
+                updateUI();
+            }
+            
+            // Load saved trees from localStorage
+            const savedTrees = localStorage.getItem('savedTrees');
+            if (savedTrees) {
+                state.savedTrees = JSON.parse(savedTrees);
+            }
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Initialize dropdowns
+            updatePersonDropdowns();
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Auth buttons
+            elements.loginBtn.addEventListener('click', showLoginForm);
+            elements.registerBtn.addEventListener('click', showRegisterForm);
+            elements.logoutBtn.addEventListener('click', logout);
+            elements.cancelLogin.addEventListener('click', hideAuthForms);
+            elements.cancelRegister.addEventListener('click', hideAuthForms);
+            
+            // Auth forms
+            elements.loginForm.addEventListener('submit', handleLogin);
+            elements.registerForm.addEventListener('submit', handleRegister);
+            
+            // Tabs
+            elements.tabs.forEach(tab => {
+                tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+            });
+            
+            // Tree controls
+            elements.personForm.addEventListener('submit', addPerson);
+            elements.generateTreeBtn.addEventListener('click', generateTree);
+            elements.saveTreeBtn.addEventListener('click', saveTree);
+            elements.exportGedcomBtn.addEventListener('click', exportToGedcom);
+            elements.loadTreeBtn.addEventListener('click', showLoadTreeModal);
+            elements.clearTreeBtn.addEventListener('click', clearTree);
+        }
+
+        // Update UI based on authentication state
+        function updateUI() {
+            if (state.currentUser) {
+                elements.authButtons.classList.add('hidden');
+                elements.userInfo.classList.remove('hidden');
+                elements.mainContent.classList.remove('hidden');
+                elements.welcomeSection.classList.add('hidden');
+                
+                elements.usernameDisplay.textContent = state.currentUser.username;
+                elements.userAvatar.textContent = state.currentUser.username.charAt(0).toUpperCase();
+                
+                // Load user's trees
+                loadUserTrees();
+            } else {
+                elements.authButtons.classList.remove('hidden');
+                elements.userInfo.classList.add('hidden');
+                elements.mainContent.classList.add('hidden');
+                elements.welcomeSection.classList.remove('hidden');
+                hideAuthForms();
+            }
+            
+            // Update table and tree visualization
+            updateFamilyTable();
+            renderTree();
+        }
+
+        // Auth functions
+        function showLoginForm() {
+            elements.loginSection.classList.remove('hidden');
+            elements.registerSection.classList.add('hidden');
+            hideAlerts();
+        }
+
+        function showRegisterForm() {
+            elements.registerSection.classList.remove('hidden');
+            elements.loginSection.classList.add('hidden');
+            hideAlerts();
+        }
+
+        function hideAuthForms() {
+            elements.loginSection.classList.add('hidden');
+            elements.registerSection.classList.add('hidden');
+            hideAlerts();
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            
+            // Simple validation
+            if (!username || !password) {
+                showAlert(elements.loginAlert, 'Please enter both username and password', 'error');
+                return;
+            }
+            
+            // Check if user exists (in a real app, this would be a server request)
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                state.currentUser = { username: user.username, email: user.email };
+                localStorage.setItem('currentUser', JSON.stringify(state.currentUser));
+                updateUI();
+                hideAuthForms();
+                showAlert(elements.treeAlert, `Welcome back, ${user.username}!`, 'success');
+            } else {
+                showAlert(elements.loginAlert, 'Invalid username or password', 'error');
+            }
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const username = document.getElementById('register-username').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            
+            // Validation
+            if (!username || !email || !password) {
+                showAlert(elements.registerAlert, 'Please fill in all fields', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showAlert(elements.registerAlert, 'Passwords do not match', 'error');
+                return;
+            }
+            
+            // Check if username already exists
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            if (users.find(u => u.username === username)) {
+                showAlert(elements.registerAlert, 'Username already exists', 'error');
+                return;
+            }
+            
+            // Create new user (in a real app, password would be hashed)
+            const newUser = { username, email, password };
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Log in the new user
+            state.currentUser = { username, email };
+            localStorage.setItem('currentUser', JSON.stringify(state.currentUser));
+            
+            updateUI();
+            hideAuthForms();
+            showAlert(elements.treeAlert, `Account created successfully! Welcome, ${username}!`, 'success');
+        }
+
+        function logout() {
+            state.currentUser = null;
+            localStorage.removeItem('currentUser');
+            updateUI();
+            showAlert(elements.treeAlert, 'You have been logged out', 'success');
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Update active tab
+            elements.tabs.forEach(tab => {
+                if (tab.dataset.tab === tabName) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            // Update active tab content
+            elements.tabContents.forEach(content => {
+                if (content.id === tabName) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        }
+
+        // Family tree functions
+        function addPerson(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('person-name').value;
+            const gender = document.getElementById('person-gender').value;
+            const birth = document.getElementById('person-birth').value;
+            const death = document.getElementById('person-death').value;
+            const notes = document.getElementById('person-notes').value;
+            const fatherId = document.getElementById('person-father').value;
+            const motherId = document.getElementById('person-mother').value;
+            const spouseId = document.getElementById('person-spouse').value;
+            
+            if (!name || !gender) {
+                showAlert(elements.treeAlert, 'Name and gender are required', 'error');
+                return;
+            }
+            
+            const person = {
+                id: generateId(),
+                name,
+                gender,
+                birth,
+                death,
+                notes,
+                fatherId,
+                motherId,
+                spouseId,
+                children: []
+            };
+            
+            state.familyTree.push(person);
+            
+            // Update parent-child relationships
+            if (fatherId) {
+                const father = state.familyTree.find(p => p.id === fatherId);
+                if (father) {
+                    father.children.push(person.id);
+                }
+            }
+            
+            if (motherId) {
+                const mother = state.familyTree.find(p => p.id === motherId);
+                if (mother) {
+                    mother.children.push(person.id);
+                }
+            }
+            
+            // Update spouse relationships
+            if (spouseId) {
+                const spouse = state.familyTree.find(p => p.id === spouseId);
+                if (spouse) {
+                    spouse.spouseId = person.id;
+                }
+            }
+            
+            // Reset form
+            elements.personForm.reset();
+            
+            // Update UI
+            updatePersonDropdowns();
+            updateFamilyTable();
+            renderTree();
+            
+            showAlert(elements.treeAlert, `${name} added to family tree`, 'success');
+        }
+
+        function updatePersonDropdowns() {
+            const fatherSelect = document.getElementById('person-father');
+            const motherSelect = document.getElementById('person-mother');
+            const spouseSelect = document.getElementById('person-spouse');
+            
+            // Clear existing options except the first one
+            while (fatherSelect.options.length > 1) fatherSelect.remove(1);
+            while (motherSelect.options.length > 1) motherSelect.remove(1);
+            while (spouseSelect.options.length > 1) spouseSelect.remove(1);
+            
+            // Add people to dropdowns
+            state.familyTree.forEach(person => {
+                const option = document.createElement('option');
+                option.value = person.id;
+                option.textContent = person.name;
+                
+                if (person.gender === 'male') {
+                    fatherSelect.appendChild(option.cloneNode(true));
+                } else if (person.gender === 'female') {
+                    motherSelect.appendChild(option.cloneNode(true));
+                }
+                
+                spouseSelect.appendChild(option);
+            });
+        }
+
+        function updateFamilyTable() {
+            elements.familyTableBody.innerHTML = '';
+            
+            state.familyTree.forEach(person => {
+                const row = document.createElement('tr');
+                
+                // Get parent and spouse names
+                const father = state.familyTree.find(p => p.id === person.fatherId);
+                const mother = state.familyTree.find(p => p.id === person.motherId);
+                const spouse = state.familyTree.find(p => p.id === person.spouseId);
+                
+                row.innerHTML = `
+                    <td>${person.name}</td>
+                    <td>${person.gender}</td>
+                    <td>${formatDate(person.birth)}</td>
+                    <td>${formatDate(person.death)}</td>
+                    <td>${father ? father.name : ''}</td>
+                    <td>${mother ? mother.name : ''}</td>
+                    <td>${spouse ? spouse.name : ''}</td>
+                    <td>
+                        <button class="btn btn-secondary" onclick="editPerson('${person.id}')">Edit</button>
+                        <button class="btn btn-danger" onclick="deletePerson('${person.id}')">Delete</button>
+                    </td>
+                `;
+                
+                elements.familyTableBody.appendChild(row);
+            });
+        }
+
+        function renderTree() {
+            elements.treeVisualization.innerHTML = '';
+            
+            if (state.familyTree.length === 0) {
+                elements.treeVisualization.innerHTML = '<p>No family members added yet. Start by adding a person above.</p>';
+                return;
+            }
+            
+            // Find root nodes (people without parents)
+            const rootNodes = state.familyTree.filter(person => 
+                !person.fatherId && !person.motherId
+            );
+            
+            // If no root nodes, use the first person as root
+            if (rootNodes.length === 0 && state.familyTree.length > 0) {
+                rootNodes.push(state.familyTree[0]);
+            }
+            
+            // Create a container for the tree
+            const treeContainer = document.createElement('div');
+            treeContainer.className = 'tree';
+            
+            // Render each root node and their descendants
+            rootNodes.forEach(root => {
+                const nodeElement = createTreeNode(root);
+                treeContainer.appendChild(nodeElement);
+                
+                // Render children if any
+                if (root.children && root.children.length > 0) {
+                    const childrenContainer = document.createElement('div');
+                    childrenContainer.className = 'tree-children';
+                    
+                    root.children.forEach(childId => {
+                        const child = state.familyTree.find(p => p.id === childId);
+                        if (child) {
+                            const childElement = createTreeNode(child);
+                            childrenContainer.appendChild(childElement);
+                        }
+                    });
+                    
+                    treeContainer.appendChild(childrenContainer);
+                }
+            });
+            
+            elements.treeVisualization.appendChild(treeContainer);
+        }
+
+        function createTreeNode(person) {
+            const node = document.createElement('div');
+            node.className = `tree-node ${person.gender}`;
+            node.dataset.id = person.id;
+            
+            let content = `<strong>${person.name}</strong>`;
+            
+            if (person.birth) {
+                content += `<br>${formatDate(person.birth)}`;
+                
+                if (person.death) {
+                    content += ` - ${formatDate(person.death)}`;
+                }
+            }
+            
+            node.innerHTML = content;
+            
+            // Add click event for editing
+            node.addEventListener('click', () => editPerson(person.id));
+            
+            return node;
+        }
+
+        function editPerson(id) {
+            const person = state.familyTree.find(p => p.id === id);
+            if (!person) return;
+            
+            // Fill form with person data
+            document.getElementById('person-name').value = person.name;
+            document.getElementById('person-gender').value = person.gender;
+            document.getElementById('person-birth').value = person.birth;
+            document.getElementById('person-death').value = person.death;
+            document.getElementById('person-notes').value = person.notes || '';
+            document.getElementById('person-father').value = person.fatherId || '';
+            document.getElementById('person-mother').value = person.motherId || '';
+            document.getElementById('person-spouse').value = person.spouseId || '';
+            
+            // Change form button to "Update"
+            const submitButton = elements.personForm.querySelector('button[type="submit"]');
+            submitButton.textContent = 'Update Person';
+            submitButton.dataset.editing = id;
+            
+            // Scroll to form
+            elements.personForm.scrollIntoView({ behavior: 'smooth' });
+            
+            showAlert(elements.treeAlert, `Editing ${person.name}`, 'success');
+        }
+
+        function deletePerson(id) {
+            const person = state.familyTree.find(p => p.id === id);
+            if (!person) return;
+            
+            if (confirm(`Are you sure you want to remove ${person.name} from the family tree?`)) {
+                // Remove person from tree
+                state.familyTree = state.familyTree.filter(p => p.id !== id);
+                
+                // Remove from parents' children arrays
+                state.familyTree.forEach(p => {
+                    p.children = p.children.filter(childId => childId !== id);
+                });
+                
+                // Remove from spouse
+                if (person.spouseId) {
+                    const spouse = state.familyTree.find(p => p.id === person.spouseId);
+                    if (spouse) {
+                        spouse.spouseId = '';
+                    }
+                }
+                
+                // Update UI
+                updatePersonDropdowns();
+                updateFamilyTable();
+                renderTree();
+                
+                showAlert(elements.treeAlert, `${person.name} removed from family tree`, 'success');
+            }
+        }
+
+        // Tree management functions
+        function generateTree() {
+            if (state.familyTree.length === 0) {
+                showAlert(elements.treeAlert, 'Add some family members first', 'error');
+                return;
+            }
+            
+            renderTree();
+            showAlert(elements.treeAlert, 'Family tree generated successfully', 'success');
+        }
+
+        function saveTree() {
+            if (!state.currentUser) {
+                showAlert(elements.treeAlert, 'You must be logged in to save trees', 'error');
+                return;
+            }
+            
+            const treeName = elements.treeName.value.trim();
+            if (!treeName) {
+                showAlert(elements.treeAlert, 'Please enter a name for your tree', 'error');
+                return;
+            }
+            
+            if (state.familyTree.length === 0) {
+                showAlert(elements.treeAlert, 'Cannot save an empty tree', 'error');
+                return;
+            }
+            
+            const treeData = {
+                id: generateId(),
+                name: treeName,
+                data: [...state.familyTree],
+                created: new Date().toISOString(),
+                updated: new Date().toISOString(),
+                userId: state.currentUser.username
+            };
+            
+            // Check if we're updating an existing tree
+            const existingIndex = state.savedTrees.findIndex(t => t.id === state.currentTreeId);
+            if (existingIndex !== -1) {
+                state.savedTrees[existingIndex] = {
+                    ...state.savedTrees[existingIndex],
+                    data: [...state.familyTree],
+                    updated: new Date().toISOString()
+                };
+            } else {
+                state.savedTrees.push(treeData);
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('savedTrees', JSON.stringify(state.savedTrees));
+            
+            // Update UI
+            loadUserTrees();
+            
+            showAlert(elements.treeAlert, `Tree "${treeName}" saved successfully`, 'success');
+        }
+
+        function loadUserTrees() {
+            if (!state.currentUser) return;
+            
+            const userTrees = state.savedTrees.filter(
+                tree => tree.userId === state.currentUser.username
+            );
+            
+            elements.savedTreesList.innerHTML = '';
+            
+            if (userTrees.length === 0) {
+                elements.savedTreesList.innerHTML = '<p>No saved trees yet. Create one in the Tree View tab.</p>';
+                return;
+            }
+            
+            userTrees.forEach(tree => {
+                const treeCard = document.createElement('div');
+                treeCard.className = 'tree-card';
+                
+                treeCard.innerHTML = `
+                    <h3>${tree.name}</h3>
+                    <p>Created: ${formatDate(tree.created)}</p>
+                    <p>Updated: ${formatDate(tree.updated)}</p>
+                    <p>People: ${tree.data.length}</p>
+                    <div class="tree-card-actions">
+                        <button class="btn btn-primary" onclick="loadTree('${tree.id}')">Load</button>
+                        <button class="btn btn-danger" onclick="deleteSavedTree('${tree.id}')">Delete</button>
+                    </div>
+                `;
+                
+                elements.savedTreesList.appendChild(treeCard);
+            });
+        }
+
+        function loadTree(treeId) {
+            const tree = state.savedTrees.find(t => t.id === treeId);
+            if (!tree) return;
+            
+            state.familyTree = [...tree.data];
+            state.currentTreeId = treeId;
+            elements.treeName.value = tree.name;
+            
+            // Update UI
+            updatePersonDropdowns();
+            updateFamilyTable();
+            renderTree();
+            
+            // Switch to tree view
+            switchTab('tree-view');
+            
+            showAlert(elements.treeAlert, `Tree "${tree.name}" loaded successfully`, 'success');
+        }
+
+        function deleteSavedTree(treeId) {
+            const tree = state.savedTrees.find(t => t.id === treeId);
+            if (!tree) return;
+            
+            if (confirm(`Are you sure you want to delete the tree "${tree.name}"?`)) {
+                state.savedTrees = state.savedTrees.filter(t => t.id !== treeId);
+                localStorage.setItem('savedTrees', JSON.stringify(state.savedTrees));
+                
+                // If the current tree is deleted, clear it
+                if (state.currentTreeId === treeId) {
+                    clearTree();
+                }
+                
+                // Update UI
+                loadUserTrees();
+                
+                showAlert(elements.treeAlert, `Tree "${tree.name}" deleted`, 'success');
+            }
+        }
+
+        function clearTree() {
+            if (state.familyTree.length === 0) return;
+            
+            if (confirm('Are you sure you want to clear the current tree? This cannot be undone.')) {
+                state.familyTree = [];
+                state.currentTreeId = null;
+                elements.treeName.value = '';
+                
+                // Update UI
+                updatePersonDropdowns();
+                updateFamilyTable();
+                renderTree();
+                
+                showAlert(elements.treeAlert, 'Tree cleared', 'success');
+            }
+        }
+
+        function showLoadTreeModal() {
+            // In a real app, this would show a modal with tree options
+            // For simplicity, we'll just switch to the saved trees tab
+            switchTab('saved-trees');
+        }
+
+        // GEDCOM Export Function
+        function exportToGedcom() {
+            if (state.familyTree.length === 0) {
+                showAlert(elements.treeAlert, 'No family tree data to export', 'error');
+                return;
+            }
+            
+            let gedcomContent = "0 HEAD\n1 GEDC\n2 VERS 5.5.1\n2 FORM LINEAGE-LINKED\n1 CHAR UTF-8\n1 SOUR ROOTS_MAGHREB\n0 @SUBM@ SUBM\n1 NAME Roots Maghreb\n";
+            
+            // Add individuals
+            state.familyTree.forEach(person => {
+                const indiId = `@I${state.familyTree.indexOf(person) + 1}@`;
+                gedcomContent += `0 ${indiId} INDI\n`;
+                gedcomContent += `1 NAME ${person.name}\n`;
+                gedcomContent += `1 SEX ${person.gender === 'male' ? 'M' : person.gender === 'female' ? 'F' : 'U'}\n`;
+                
+                if (person.birth) {
+                    gedcomContent += `1 BIRT\n2 DATE ${formatDateForGedcom(person.birth)}\n`;
+                }
+                
+                if (person.death) {
+                    gedcomContent += `1 DEAT\n2 DATE ${formatDateForGedcom(person.death)}\n`;
+                }
+                
+                // Add family relationships
+                if (person.fatherId || person.motherId) {
+                    const familyId = `@F${generateFamilyId(person)}@`;
+                    gedcomContent += `1 FAMC ${familyId}\n`;
+                }
+                
+                if (person.spouseId) {
+                    const familyId = `@F${generateFamilyId(person, true)}@`;
+                    gedcomContent += `1 FAMS ${familyId}\n`;
+                }
+            });
+            
+            // Add families
+            const families = generateFamilies();
+            families.forEach(family => {
+                gedcomContent += `0 ${family.id} FAM\n`;
+                if (family.husband) {
+                    gedcomContent += `1 HUSB ${family.husband}\n`;
+                }
+                if (family.wife) {
+                    gedcomContent += `1 WIFE ${family.wife}\n`;
+                }
+                family.children.forEach(child => {
+                    gedcomContent += `1 CHIL ${child}\n`;
+                });
+            });
+            
+            gedcomContent += "0 TRLR\n";
+            
+            // Create and download the file
+            const blob = new Blob([gedcomContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${elements.treeName.value || 'family_tree'}.ged`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showAlert(elements.treeAlert, 'GEDCOM file exported successfully', 'success');
+        }
+
+        function generateFamilies() {
+            const families = [];
+            
+            // Create families based on parent-child relationships
+            state.familyTree.forEach(person => {
+                if (person.fatherId || person.motherId) {
+                    const father = state.familyTree.find(p => p.id === person.fatherId);
+                    const mother = state.familyTree.find(p => p.id === person.motherId);
+                    
+                    if (father || mother) {
+                        const familyId = `@F${families.length + 1}@`;
+                        const existingFamily = families.find(f => 
+                            f.husband === `@I${state.familyTree.indexOf(father) + 1}@` && 
+                            f.wife === `@I${state.familyTree.indexOf(mother) + 1}@`
+                        );
+                        
+                        if (existingFamily) {
+                            existingFamily.children.push(`@I${state.familyTree.indexOf(person) + 1}@`);
+                        } else {
+                            families.push({
+                                id: familyId,
+                                husband: father ? `@I${state.familyTree.indexOf(father) + 1}@` : null,
+                                wife: mother ? `@I${state.familyTree.indexOf(mother) + 1}@` : null,
+                                children: [`@I${state.familyTree.indexOf(person) + 1}@`]
+                            });
+                        }
+                    }
+                }
+            });
+            
+            // Create families based on spouse relationships
+            state.familyTree.forEach(person => {
+                if (person.spouseId) {
+                    const spouse = state.familyTree.find(p => p.id === person.spouseId);
+                    if (spouse) {
+                        const familyId = `@F${families.length + 1}@`;
+                        const existingFamily = families.find(f => 
+                            (f.husband === `@I${state.familyTree.indexOf(person) + 1}@` && 
+                             f.wife === `@I${state.familyTree.indexOf(spouse) + 1}@`) ||
+                            (f.husband === `@I${state.familyTree.indexOf(spouse) + 1}@` && 
+                             f.wife === `@I${state.familyTree.indexOf(person) + 1}@`)
+                        );
+                        
+                        if (!existingFamily) {
+                            families.push({
+                                id: familyId,
+                                husband: person.gender === 'male' ? `@I${state.familyTree.indexOf(person) + 1}@` : `@I${state.familyTree.indexOf(spouse) + 1}@`,
+                                wife: person.gender === 'female' ? `@I${state.familyTree.indexOf(person) + 1}@` : `@I${state.familyTree.indexOf(spouse) + 1}@`,
+                                children: []
+                            });
+                        }
+                    }
+                }
+            });
+            
+            return families;
+        }
+
+        function generateFamilyId(person, isSpouse = false) {
+            // Generate a unique family ID based on person's relationships
+            if (isSpouse) {
+                const spouseIndex = state.familyTree.findIndex(p => p.id === person.spouseId);
+                return Math.max(state.familyTree.indexOf(person), spouseIndex) + 100;
+            } else {
+                const fatherIndex = state.familyTree.findIndex(p => p.id === person.fatherId);
+                const motherIndex = state.familyTree.findIndex(p => p.id === person.motherId);
+                return Math.max(fatherIndex, motherIndex, 0) + 1;
+            }
+        }
+
+        function formatDateForGedcom(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = date.toLocaleString('en', { month: 'short' }).toUpperCase();
+            const year = date.getFullYear();
+            return `${day} ${month} ${year}`;
+        }
+
+        // Utility functions
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString();
+        }
+
+        function showAlert(alertElement, message, type) {
+            alertElement.textContent = message;
+            alertElement.className = `alert alert-${type}`;
+            alertElement.classList.remove('hidden');
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                alertElement.classList.add('hidden');
+            }, 5000);
+        }
+
+        function hideAlerts() {
+            elements.loginAlert.classList.add('hidden');
+            elements.registerAlert.classList.add('hidden');
+            elements.treeAlert.classList.add('hidden');
+        }
+
+        // Initialize the app when the page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
