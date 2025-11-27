@@ -113,9 +113,49 @@
             gap: 15px;
         }
         
-        .auth-buttons {
+        .auth-toggle-container {
+            position: relative;
             display: flex;
-            gap: 10px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 30px;
+            padding: 4px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .auth-toggle-slider {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 50%;
+            height: calc(100% - 8px);
+            background: white;
+            border-radius: 30px;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            transform: translateX(0);
+        }
+        
+        .auth-toggle-slider.skew {
+            animation: skewAnimation 0.4s forwards;
+        }
+        
+        @keyframes skewAnimation {
+            0% { transform: translateX(0) skewX(0); }
+            50% { transform: translateX(50%) skewX(15deg); }
+            100% { transform: translateX(100%) skewX(0); }
+        }
+        
+        .auth-toggle-option {
+            padding: 8px 16px;
+            font-weight: 600;
+            z-index: 1;
+            transition: color 0.3s;
+            position: relative;
+            color: white;
+        }
+        
+        .auth-toggle-option.active {
+            color: var(--primary-color);
         }
         
         .theme-toggle, .language-toggle {
@@ -469,11 +509,6 @@
             border-left-color: #DC143C;
         }
         
-        .login-form, .register-form {
-            max-width: 450px;
-            margin: 0 auto;
-        }
-        
         .user-info {
             display: flex;
             align-items: center;
@@ -572,6 +607,85 @@
             background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23d2691e' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
         }
         
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: var(--light-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 450px;
+            transform: translateY(-20px);
+            transition: transform 0.3s;
+            position: relative;
+        }
+        
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: color 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--secondary-color);
+        }
+        
+        .modal-body {
+            padding: 25px;
+        }
+        
+        .login-form, .register-form {
+            display: none;
+        }
+        
+        .login-form.active, .register-form.active {
+            display: block;
+        }
+        
+        .modal-alert {
+            margin-bottom: 20px;
+        }
+        
         /* Mobile menu styles */
         .mobile-menu-toggle {
             display: none;
@@ -627,7 +741,7 @@
                 padding: 0 15px;
             }
             
-            .desktop-nav, .header-controls .auth-buttons, .header-controls .theme-toggle, .header-controls .language-toggle {
+            .desktop-nav, .header-controls .theme-toggle, .header-controls .language-toggle {
                 display: none;
             }
             
@@ -687,16 +801,16 @@
             </nav>
             
             <div class="header-controls">
-                <div class="auth-section">
-                    <div id="auth-buttons" class="auth-buttons">
-                        <button id="login-btn" class="btn btn-secondary" data-translate="btn-login">Login</button>
-                        <button id="register-btn" class="btn btn-primary" data-translate="btn-register">Register</button>
-                    </div>
-                    <div id="user-info" class="user-info hidden">
-                        <div class="user-avatar" id="user-avatar">U</div>
-                        <span id="username-display">User</span>
-                        <button id="logout-btn" class="btn btn-secondary" data-translate="btn-logout">Logout</button>
-                    </div>
+                <div id="auth-toggle-container" class="auth-toggle-container hidden">
+                    <div class="auth-toggle-slider"></div>
+                    <div class="auth-toggle-option active" data-form="login">Login</div>
+                    <div class="auth-toggle-option" data-form="register">Sign Up</div>
+                </div>
+                
+                <div id="user-info" class="user-info hidden">
+                    <div class="user-avatar" id="user-avatar">U</div>
+                    <span id="username-display">User</span>
+                    <button id="logout-btn" class="btn btn-secondary" data-translate="btn-logout">Logout</button>
                 </div>
                 
                 <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode">🌙</button>
@@ -726,10 +840,12 @@
             </nav>
             
             <div class="mobile-controls">
-                <div id="mobile-auth-buttons" class="auth-buttons">
-                    <button id="mobile-login-btn" class="btn btn-secondary" data-translate="btn-login">Login</button>
-                    <button id="mobile-register-btn" class="btn btn-primary" data-translate="btn-register">Register</button>
+                <div id="mobile-auth-toggle-container" class="auth-toggle-container hidden">
+                    <div class="auth-toggle-slider"></div>
+                    <div class="auth-toggle-option active" data-form="login">Login</div>
+                    <div class="auth-toggle-option" data-form="register">Sign Up</div>
                 </div>
+                
                 <div id="mobile-user-info" class="user-info hidden">
                     <div class="user-avatar" id="mobile-user-avatar">U</div>
                     <span id="mobile-username-display">User</span>
@@ -738,6 +854,51 @@
             </div>
         </div>
     </header>
+
+    <!-- Auth Modal -->
+    <div class="modal" id="auth-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title" data-translate="login-title">Login to Your Account</h2>
+                <button class="close-modal" id="close-modal">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-alert" class="alert hidden modal-alert"></div>
+                
+                <form id="login-form" class="login-form active">
+                    <div class="form-group">
+                        <label for="login-username" data-translate="label-username">Username</label>
+                        <input type="text" id="login-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password" data-translate="label-password">Password</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" data-translate="btn-login">Login</button>
+                </form>
+                
+                <form id="register-form" class="register-form">
+                    <div class="form-group">
+                        <label for="register-username" data-translate="label-username">Username</label>
+                        <input type="text" id="register-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email" data-translate="label-email">Email</label>
+                        <input type="email" id="register-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password" data-translate="label-password">Password</label>
+                        <input type="password" id="register-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-confirm-password" data-translate="label-confirm-password">Confirm Password</label>
+                        <input type="password" id="register-confirm-password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" data-translate="btn-register">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <div class="container">
         <!-- Welcome Section -->
@@ -761,56 +922,6 @@
                     <p data-translate="feature3-text">Preserve your family history with secure storage and GEDCOM export</p>
                 </div>
             </div>
-        </div>
-
-        <!-- Login Form -->
-        <div id="login-section" class="section hidden">
-            <h2 class="section-title">
-                <span class="section-title-icon">🔐</span>
-                <span data-translate="login-title">Login to Your Account</span>
-            </h2>
-            <div id="login-alert" class="alert hidden"></div>
-            <form id="login-form" class="login-form">
-                <div class="form-group">
-                    <label for="login-username" data-translate="label-username">Username</label>
-                    <input type="text" id="login-username" required>
-                </div>
-                <div class="form-group">
-                    <label for="login-password" data-translate="label-password">Password</label>
-                    <input type="password" id="login-password" required>
-                </div>
-                <button type="submit" class="btn btn-primary" data-translate="btn-login">Login</button>
-                <button type="button" id="cancel-login" class="btn btn-secondary" data-translate="btn-cancel">Cancel</button>
-            </form>
-        </div>
-
-        <!-- Register Form -->
-        <div id="register-section" class="section hidden">
-            <h2 class="section-title">
-                <span class="section-title-icon">📝</span>
-                <span data-translate="register-title">Create New Account</span>
-            </h2>
-            <div id="register-alert" class="alert hidden"></div>
-            <form id="register-form" class="register-form">
-                <div class="form-group">
-                    <label for="register-username" data-translate="label-username">Username</label>
-                    <input type="text" id="register-username" required>
-                </div>
-                <div class="form-group">
-                    <label for="register-email" data-translate="label-email">Email</label>
-                    <input type="email" id="register-email" required>
-                </div>
-                <div class="form-group">
-                    <label for="register-password" data-translate="label-password">Password</label>
-                    <input type="password" id="register-password" required>
-                </div>
-                <div class="form-group">
-                    <label for="register-confirm-password" data-translate="label-confirm-password">Confirm Password</label>
-                    <input type="password" id="register-confirm-password" required>
-                </div>
-                <button type="submit" class="btn btn-primary" data-translate="btn-register">Register</button>
-                <button type="button" id="cancel-register" class="btn btn-secondary" data-translate="btn-cancel">Cancel</button>
-            </form>
         </div>
 
         <!-- Main Content -->
@@ -1295,40 +1406,39 @@
             savedTrees: [],
             currentTreeId: null,
             currentLanguage: 'en',
-            currentTheme: 'light'
+            currentTheme: 'light',
+            authForm: 'login' // 'login' or 'register'
         };
 
         // DOM Elements
         const elements = {
             // Auth elements
-            authButtons: document.getElementById('auth-buttons'),
+            authToggleContainer: document.getElementById('auth-toggle-container'),
+            authToggleSlider: document.querySelector('.auth-toggle-slider'),
+            authToggleOptions: document.querySelectorAll('.auth-toggle-option'),
             userInfo: document.getElementById('user-info'),
             userAvatar: document.getElementById('user-avatar'),
             usernameDisplay: document.getElementById('username-display'),
-            loginBtn: document.getElementById('login-btn'),
-            registerBtn: document.getElementById('register-btn'),
             logoutBtn: document.getElementById('logout-btn'),
             
             // Mobile auth elements
-            mobileAuthButtons: document.getElementById('mobile-auth-buttons'),
+            mobileAuthToggleContainer: document.getElementById('mobile-auth-toggle-container'),
             mobileUserInfo: document.getElementById('mobile-user-info'),
             mobileUserAvatar: document.getElementById('mobile-user-avatar'),
             mobileUsernameDisplay: document.getElementById('mobile-username-display'),
-            mobileLoginBtn: document.getElementById('mobile-login-btn'),
-            mobileRegisterBtn: document.getElementById('mobile-register-btn'),
             mobileLogoutBtn: document.getElementById('mobile-logout-btn'),
+            
+            // Modal elements
+            authModal: document.getElementById('auth-modal'),
+            closeModal: document.getElementById('close-modal'),
+            modalTitle: document.getElementById('modal-title'),
+            modalAlert: document.getElementById('modal-alert'),
+            loginForm: document.getElementById('login-form'),
+            registerForm: document.getElementById('register-form'),
             
             // Mobile menu
             mobileMenuToggle: document.getElementById('mobile-menu-toggle'),
             mobileMenu: document.getElementById('mobile-menu'),
-            
-            // Forms
-            loginSection: document.getElementById('login-section'),
-            registerSection: document.getElementById('register-section'),
-            loginForm: document.getElementById('login-form'),
-            registerForm: document.getElementById('register-form'),
-            cancelLogin: document.getElementById('cancel-login'),
-            cancelRegister: document.getElementById('cancel-register'),
             
             // Main content
             mainContent: document.getElementById('main-content'),
@@ -1355,8 +1465,6 @@
             savedTreesList: document.getElementById('saved-trees-list'),
             
             // Alerts
-            loginAlert: document.getElementById('login-alert'),
-            registerAlert: document.getElementById('register-alert'),
             treeAlert: document.getElementById('tree-alert'),
             
             // Theme and language
@@ -1407,16 +1515,28 @@
 
         // Set up event listeners
         function setupEventListeners() {
-            // Auth buttons
-            elements.loginBtn.addEventListener('click', showLoginForm);
-            elements.registerBtn.addEventListener('click', showRegisterForm);
-            elements.logoutBtn.addEventListener('click', logout);
-            elements.cancelLogin.addEventListener('click', hideAuthForms);
-            elements.cancelRegister.addEventListener('click', hideAuthForms);
+            // Auth toggle
+            elements.authToggleContainer.addEventListener('click', toggleAuthForm);
+            elements.mobileAuthToggleContainer.addEventListener('click', toggleAuthForm);
             
-            // Mobile auth buttons
-            elements.mobileLoginBtn.addEventListener('click', showLoginForm);
-            elements.mobileRegisterBtn.addEventListener('click', showRegisterForm);
+            // Auth toggle options
+            elements.authToggleOptions.forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    switchAuthForm(option.dataset.form);
+                });
+            });
+            
+            // Modal
+            elements.closeModal.addEventListener('click', closeModal);
+            elements.authModal.addEventListener('click', (e) => {
+                if (e.target === elements.authModal) {
+                    closeModal();
+                }
+            });
+            
+            // Logout buttons
+            elements.logoutBtn.addEventListener('click', logout);
             elements.mobileLogoutBtn.addEventListener('click', logout);
             
             // Mobile menu
@@ -1449,9 +1569,9 @@
         // Update UI based on authentication state
         function updateUI() {
             if (state.currentUser) {
-                elements.authButtons.classList.add('hidden');
+                elements.authToggleContainer.classList.add('hidden');
+                elements.mobileAuthToggleContainer.classList.add('hidden');
                 elements.userInfo.classList.remove('hidden');
-                elements.mobileAuthButtons.classList.add('hidden');
                 elements.mobileUserInfo.classList.remove('hidden');
                 elements.mainContent.classList.remove('hidden');
                 elements.welcomeSection.classList.add('hidden');
@@ -1464,18 +1584,69 @@
                 // Load user's trees
                 loadUserTrees();
             } else {
-                elements.authButtons.classList.remove('hidden');
+                elements.authToggleContainer.classList.remove('hidden');
+                elements.mobileAuthToggleContainer.classList.remove('hidden');
                 elements.userInfo.classList.add('hidden');
-                elements.mobileAuthButtons.classList.remove('hidden');
                 elements.mobileUserInfo.classList.add('hidden');
                 elements.mainContent.classList.add('hidden');
                 elements.welcomeSection.classList.remove('hidden');
-                hideAuthForms();
             }
             
             // Update table and tree visualization
             updateFamilyTable();
             renderTree();
+        }
+
+        // Auth toggle functions
+        function toggleAuthForm() {
+            openModal();
+        }
+
+        function switchAuthForm(form) {
+            if (form === state.authForm) return;
+            
+            state.authForm = form;
+            
+            // Update toggle slider position
+            elements.authToggleSlider.classList.add('skew');
+            setTimeout(() => {
+                elements.authToggleSlider.classList.remove('skew');
+            }, 400);
+            
+            // Update active option
+            elements.authToggleOptions.forEach(option => {
+                if (option.dataset.form === form) {
+                    option.classList.add('active');
+                } else {
+                    option.classList.remove('active');
+                }
+            });
+            
+            // Update modal form
+            if (form === 'login') {
+                elements.loginForm.classList.add('active');
+                elements.registerForm.classList.remove('active');
+                elements.modalTitle.textContent = 'Login to Your Account';
+            } else {
+                elements.loginForm.classList.remove('active');
+                elements.registerForm.classList.add('active');
+                elements.modalTitle.textContent = 'Create New Account';
+            }
+            
+            // Clear alerts
+            elements.modalAlert.classList.add('hidden');
+        }
+
+        // Modal functions
+        function openModal() {
+            elements.authModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            elements.authModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            elements.modalAlert.classList.add('hidden');
         }
 
         // Theme functions
@@ -1527,30 +1698,6 @@
         }
 
         // Auth functions
-        function showLoginForm() {
-            elements.loginSection.classList.remove('hidden');
-            elements.registerSection.classList.add('hidden');
-            hideAlerts();
-            closeMobileMenu();
-        }
-
-        function showRegisterForm() {
-            elements.registerSection.classList.remove('hidden');
-            elements.loginSection.classList.add('hidden');
-            hideAlerts();
-            closeMobileMenu();
-        }
-
-        function hideAuthForms() {
-            elements.loginSection.classList.add('hidden');
-            elements.registerSection.classList.add('hidden');
-            hideAlerts();
-        }
-
-        function closeMobileMenu() {
-            elements.mobileMenu.classList.remove('active');
-        }
-
         function handleLogin(e) {
             e.preventDefault();
             const username = document.getElementById('login-username').value;
@@ -1558,7 +1705,7 @@
             
             // Simple validation
             if (!username || !password) {
-                showAlert(elements.loginAlert, 'Please enter both username and password', 'error');
+                showAlert(elements.modalAlert, 'Please enter both username and password', 'error');
                 return;
             }
             
@@ -1570,10 +1717,10 @@
                 state.currentUser = { username: user.username, email: user.email };
                 localStorage.setItem('currentUser', JSON.stringify(state.currentUser));
                 updateUI();
-                hideAuthForms();
+                closeModal();
                 showAlert(elements.treeAlert, `Welcome back, ${user.username}!`, 'success');
             } else {
-                showAlert(elements.loginAlert, 'Invalid username or password', 'error');
+                showAlert(elements.modalAlert, 'Invalid username or password', 'error');
             }
         }
 
@@ -1586,19 +1733,19 @@
             
             // Validation
             if (!username || !email || !password) {
-                showAlert(elements.registerAlert, 'Please fill in all fields', 'error');
+                showAlert(elements.modalAlert, 'Please fill in all fields', 'error');
                 return;
             }
             
             if (password !== confirmPassword) {
-                showAlert(elements.registerAlert, 'Passwords do not match', 'error');
+                showAlert(elements.modalAlert, 'Passwords do not match', 'error');
                 return;
             }
             
             // Check if username already exists
             const users = JSON.parse(localStorage.getItem('users') || '[]');
             if (users.find(u => u.username === username)) {
-                showAlert(elements.registerAlert, 'Username already exists', 'error');
+                showAlert(elements.modalAlert, 'Username already exists', 'error');
                 return;
             }
             
@@ -1612,7 +1759,7 @@
             localStorage.setItem('currentUser', JSON.stringify(state.currentUser));
             
             updateUI();
-            hideAuthForms();
+            closeModal();
             showAlert(elements.treeAlert, `Account created successfully! Welcome, ${username}!`, 'success');
         }
 
@@ -2213,12 +2360,6 @@
             setTimeout(() => {
                 alertElement.classList.add('hidden');
             }, 5000);
-        }
-
-        function hideAlerts() {
-            elements.loginAlert.classList.add('hidden');
-            elements.registerAlert.classList.add('hidden');
-            elements.treeAlert.classList.add('hidden');
         }
 
         // Initialize the app when the page loads
